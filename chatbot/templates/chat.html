@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Chatbot</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f5f5f5;
+}
+
+#chatbox{
+width:400px;
+margin:50px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+}
+
+#messages{
+height:300px;
+overflow-y:auto;
+margin-bottom:10px;
+}
+
+.user{
+color:blue;
+}
+
+.bot{
+color:green;
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="chatbox">
+
+<h3>Enterprise Assistant</h3>
+
+<div id="messages"></div>
+
+<form id="chat-form">
+<input type="text" id="user-input" placeholder="Ask something..." autocomplete="off"/>
+<button type="submit">Send</button>
+</form>
+
+</div>
+
+<script>
+
+const form = document.getElementById('chat-form');
+
+form.addEventListener('submit', async (e) => {
+
+e.preventDefault();
+
+const input = document.getElementById('user-input');
+
+const res = await fetch('',{
+method:'POST',
+headers:{'X-CSRFToken':'{{ csrf_token }}'},
+body:new URLSearchParams({'message':input.value})
+});
+
+const data = await res.json();
+
+document.getElementById('messages').innerHTML += 
+`<p class="user">You: ${input.value}</p>
+<p class="bot">Bot: ${data.reply}</p>`;
+
+input.value="";
+
+});
+
+</script>
+
+</body>
+</html>
